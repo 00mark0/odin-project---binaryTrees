@@ -23,8 +23,6 @@ function levelOrder(node, callback) {
   }
 }
 
-module.exports = levelOrder;
-
 // in-order traversal
 const walk2 = (curr, callback, path = []) => {
   // base case
@@ -45,8 +43,6 @@ const walk2 = (curr, callback, path = []) => {
 };
 
 const inOrder = (head, callback) => walk2(head, callback, []);
-
-module.exports = inOrder;
 
 // pre-order traversal
 const walk = (curr, callback, path = []) => {
@@ -72,8 +68,6 @@ const preOrder = (head, callback) => {
   return walk(head, callback, []);
 };
 
-module.exports = preOrder;
-
 // post-order traversal
 const walk3 = (curr, callback, path = []) => {
   // base case
@@ -96,4 +90,9 @@ const postOrder = (head, callback) => {
   return walk3(head, callback, []);
 };
 
-module.exports = postOrder;
+module.exports = {
+  levelOrder,
+  inOrder,
+  preOrder,
+  postOrder,
+};

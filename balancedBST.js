@@ -2,10 +2,8 @@
 
 const Node = require("./node");
 const quick_sort = require("./quickSort");
-const levelOrder = require("./traversals");
-const inOrder = require("./traversals");
-const preOrder = require("./traversals");
-const postOrder = require("./traversals");
+const { levelOrder, inOrder, preOrder, postOrder } = require("./traversals");
+const generateArray = require("./generateArray");
 
 class Tree {
   constructor(arr) {
@@ -60,6 +58,58 @@ class Tree {
 
   find(value) {
     return this.findNode(this.root, value);
+  }
+
+  height(node) {
+    if (node === null) {
+      return 0;
+    } else {
+      let leftHeight = this.height(node.left);
+      let rightHeight = this.height(node.right);
+
+      if (leftHeight > rightHeight) {
+        return leftHeight + 1;
+      } else {
+        return rightHeight + 1;
+      }
+    }
+  }
+
+  depth(node, root = this.root, depth = 0) {
+    if (root === null) {
+      return -1;
+    }
+    if (root === node) {
+      return depth;
+    }
+
+    let left = this.depth(node, root.left, depth + 1);
+    if (left !== -1) {
+      return left;
+    }
+
+    return this.depth(node, root.right, depth + 1);
+  }
+
+  isBalanced(node = this.root) {
+    if (node === null) {
+      return true;
+    }
+
+    let leftHeight = this.height(node.left);
+    let rightHeight = this.height(node.right);
+
+    return (
+      Math.abs(leftHeight - rightHeight) <= 1 &&
+      this.isBalanced(node.left) &&
+      this.isBalanced(node.right)
+    );
+  }
+
+  rebalance() {
+    let arr = [];
+    inOrder(this.root, (node) => arr.push(node.data));
+    this.root = this.buildTree(arr, 0, arr.length - 1);
   }
 
   insertNode(node, newNode) {
@@ -128,9 +178,44 @@ class Tree {
   }
 }
 
-const tree = new Tree([15, 10, 20, 8, 12, 16, 25]);
+const array = generateArray(99);
+const tree = new Tree(array);
 
-const values = postOrder(tree.root);
-console.log(values);
+console.log(tree.isBalanced());
+
+const levelOrderResult = levelOrder(tree.root);
+console.log(levelOrderResult);
+
+const inOrderResult = inOrder(tree.root);
+console.log(inOrderResult);
+
+const preOrderResult = preOrder(tree.root);
+console.log(preOrderResult);
+
+const postOrderResult = postOrder(tree.root);
+console.log(postOrderResult);
+
+tree.insert(101);
+tree.insert(102);
+tree.insert(103);
+tree.insert(104);
+
+console.log(tree.isBalanced());
+
+tree.rebalance();
+
+console.log(tree.isBalanced());
+
+const levelOrderResult2 = levelOrder(tree.root);
+console.log(levelOrderResult2);
+
+const inOrderResult2 = inOrder(tree.root);
+console.log(inOrderResult2);
+
+const preOrderResult2 = preOrder(tree.root);
+console.log(preOrderResult2);
+
+const postOrderResult2 = postOrder(tree.root);
+console.log(postOrderResult2);
 
 tree.prettyPrint(tree.root);
